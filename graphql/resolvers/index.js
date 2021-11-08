@@ -2,6 +2,8 @@ const graphQLUpload = require('graphql-upload');
 
 const storeUpload = require('./helpers/storeUpload');
 const File = require('../../models/file');
+const JournalEntry = require('../../models/journalEntry');
+const merge = require('./helpers/merge');
 
 module.exports = {
 	Upload: graphQLUpload, //Resolves the `Upload` scalar
@@ -28,5 +30,14 @@ module.exports = {
 				return storedFiles;
 			}, []);
 		},
+		journalEntryUpload: async (parent, { content }) => {
+			const journalEntry = new JournalEntry({content});
+			try{
+				journalEntry.save();
+				return merge.transformJournalEntry(journalEntry);
+			} catch (err) {
+				return err;
+			}
+		}
 	},
 };

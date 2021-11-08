@@ -10,6 +10,11 @@ type File {
 	encoding: String!
 }
 
+type JournalEntry {
+	content: String!
+	createdAt: String!
+}
+
 type Query {
 	uploads: [File!]!
 }
@@ -17,5 +22,6 @@ type Query {
 type Mutation {
 	singleUpload(file: Upload!): File!
 	multipleUpload(files: [Upload!]!): [File!]!
+	journalEntryUpload(content: String!): JournalEntry!
 }
 `);
