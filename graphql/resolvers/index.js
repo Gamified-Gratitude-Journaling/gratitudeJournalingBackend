@@ -11,7 +11,10 @@ module.exports = {
 		// Retrieve metadata of all files in our MongoDB database.
 		uploads: async () => {
 			return (await File.find()).map((file) => file._doc);
-		}
+		},
+		journalEntryUploads: async (parent) => {
+			return (await JournalEntry.find()).map(entry => merge.transformJournalEntry(entry))
+		},
 	},
 	Mutation: {
 		// Store a single file

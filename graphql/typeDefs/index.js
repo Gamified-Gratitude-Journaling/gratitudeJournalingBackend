@@ -17,6 +17,7 @@ type JournalEntry {
 
 type Query {
 	uploads: [File!]!
+	journalEntryUploads: [JournalEntry!]!
 }
 
 type Mutation {
