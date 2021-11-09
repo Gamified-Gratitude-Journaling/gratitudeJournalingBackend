@@ -33,7 +33,7 @@ module.exports = {
 		journalEntryUpload: async (parent, { content }) => {
 			const journalEntry = new JournalEntry({content});
 			try{
-				journalEntry.save();
+				await journalEntry.save();
 				return merge.transformJournalEntry(journalEntry);
 			} catch (err) {
 				return err;

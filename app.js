@@ -6,7 +6,6 @@ const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const { graphqlUploadExpress } = require('graphql-upload');
 const mongoose = require('mongoose');
 require('dotenv').config(); //configure environment variables as specified in `.env`
-"test"
 
 const UPLOAD_DIRECTORY_URL = require('./config/UPLOAD_DIRECTORY_URL.js');
 const apolloTypeDefs = require('./graphql/typeDefs/index');

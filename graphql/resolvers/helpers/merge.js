@@ -21,7 +21,6 @@ const features = {
 		return {
 			...journalEntry._doc,
 			createdAt: dateToString(journalEntry.createdAt),
-			updatedAt: dateToString(journalEntry.updatedAt),
 		};
 	},
 
