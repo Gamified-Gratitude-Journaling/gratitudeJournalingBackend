@@ -2,8 +2,9 @@ const graphQLUpload = require('graphql-upload');
 
 const storeUpload = require('./helpers/storeUpload');
 const File = require('../../models/file');
-const JournalEntry = require('../../models/journalEntry');
-const merge = require('./helpers/merge');
+
+const entries = require('./entries');
+const auth = require('./auth');
 
 module.exports = {
 	Upload: graphQLUpload, //Resolves the `Upload` scalar
@@ -12,9 +13,8 @@ module.exports = {
 		uploads: async () => {
 			return (await File.find()).map((file) => file._doc);
 		},
-		journalEntryUploads: async (parent) => {
-			return (await JournalEntry.find()).map(entry => merge.transformJournalEntry(entry))
-		},
+		...auth.Query,
+		...entries.Query,
 	},
 	Mutation: {
 		// Store a single file
@@ -33,14 +33,7 @@ module.exports = {
 				return storedFiles;
 			}, []);
 		},
-		journalEntryUpload: async (parent, { content }) => {
-			const journalEntry = new JournalEntry({content});
-			try{
-				await journalEntry.save();
-				return merge.transformJournalEntry(journalEntry);
-			} catch (err) {
-				return err;
-			}
-		}
+		...auth.Mutation,
+		...entries.Mutation,
 	},
 };

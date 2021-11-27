@@ -1,4 +1,5 @@
 const makeDir = require('make-dir');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const http = require('http');
 const { ApolloServer } = require('apollo-server-express');
@@ -36,7 +37,30 @@ async function startServer() {
 		}
 		next();
 	});
-	
+
+	// User authentication
+	app.use((req, res, next) => {
+		const authHeader = req.get('Authorization');
+		req.isAuth = false;
+		if (!authHeader) {
+			return next();
+		}
+		const token = authHeader.split(' ')[1]; //Bearer Token
+		if (!token || token === '') {
+			return next();
+		}
+		try {
+			decodedToken = jwt.verify(token, 'somesupersecretkey');
+		} catch (err) {
+			return next();
+		}
+		if (!decodedToken) {
+			return next();
+		}
+		req.isAuth = true;
+		req.userId = decodedToken.userId;
+		return next();
+	});
 
 	// Required logic for integrating Apollo with Express
 	// Check official docs at https://www.apollographql.com/docs/apollo-server/integrations/middleware/#apollo-server-express
@@ -64,4 +88,8 @@ async function startServer() {
 }
 
 //console.log(process.env);
-startServer();
+try {
+	startServer();
+} catch (err){
+	console.log(err);
+}
