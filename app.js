@@ -68,6 +68,11 @@ async function startServer() {
 	const apolloServer = new ApolloServer({
 		typeDefs: apolloTypeDefs,
 		resolvers: apolloResolvers,
+		context: ({ req }) => {
+			return {
+				userId: req.userId,
+			}
+		},
 		//Gracefully stops the server
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 		introspection: true,
@@ -90,6 +95,6 @@ async function startServer() {
 //console.log(process.env);
 try {
 	startServer();
-} catch (err){
+} catch (err) {
 	console.log(err);
 }

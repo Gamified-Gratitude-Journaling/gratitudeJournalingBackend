@@ -22,6 +22,7 @@ type authData {
 }
 
 type JournalEntry {
+	_id: ID!
 	content: String!
 	createdAt: String!
 	user: User!
