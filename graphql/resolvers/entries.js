@@ -29,7 +29,7 @@ module.exports = {
 				await journalEntry.save();
 				return merge.transformJournalEntry(journalEntry);
 			} catch (err) {
-				return err;
+				throw err;
 			}
 		},
 	},

@@ -1,7 +1,3 @@
-/*
- * A mongoose model representing the `File` type defined in '../graphql/index.js'
- */
-
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -13,7 +9,8 @@ const journalEntrySchema = new Schema({
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: 'User'
+		ref: 'User',
+		required: true,
 	},
 }, { timestamps: true });
 

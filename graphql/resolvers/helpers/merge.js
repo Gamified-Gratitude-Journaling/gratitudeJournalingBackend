@@ -4,6 +4,7 @@ const File = require('../../../models/file');
 const JournalEntry = require('../../../models/journalEntry');
 const User = require('../../../models/user');
 const Prompt = require('../../../models/prompt');
+const Point = require('../../../models/point');
 
 const dateToString = (date) => {
 	if (!date) return null;
@@ -18,21 +19,29 @@ const fileLoader = new DataLoader((fileIds) => {
 	return File.find({ _id: { $in: fileIds } });
 });
 
-const journalEntryLoader = new DataLoader((journalEntryId) => {
-	return JournalEntry.find({ _id: journalEntryId });
+const journalEntryLoader = new DataLoader((journalEntryIds) => {
+	return JournalEntry.find({ _id: { $in: journalEntryIds } });
 });
 
-const promptEntryLoader = new DataLoader((promptEntryId) => {
-	return PromptEntry.find({ _id: promptEntryId });
+const promptLoader = new DataLoader((promptIds) => {
+	return Prompt.find({ _id: { $in: promptIds } });
+});
+
+const pointLoader = new DataLoader((pointIds) => {
+	return Point.find({ _id: { $in: pointIds.map(pointId => pointId.toString()) } });
 });
 
 const features = {
-	user : async userId => {
+	user: async userId => {
 		const user = await userLoader.load(userId.toString());
 		try {
 			return {
 				...user._doc, password: null,
-				//createdEvents: () => eventLoader.loadMany(user._doc.createdEvents)
+				points: async () => {
+					return (await pointLoader.loadMany(user._doc.points)).map(point => {
+						return features.transformPoint(point);
+					})
+				}
 			};
 		} catch (err) {
 			throw err;
@@ -71,6 +80,19 @@ const features = {
 	prompt: async promptId => {
 		const prompt = await promptLoader.load(promptId.toString());
 		return features.transformPrompt(prompt);
+	},
+
+	transformPoint: (point) => {
+		return {
+			...point._doc,
+			createdAt: dateToString(point.createdAt),
+			user: features.user.bind(this, point._doc.user),
+		};
+	},
+
+	point: async pointId => {
+		const point = await pointLoader.load(pointId.toString());
+		return features.transformPoint(point);
 	},
 };
 

@@ -11,6 +11,14 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	}, 
+	points: {
+		type: [{
+			type: Schema.Types.ObjectId,
+			ref: 'Point',
+			required: true,
+		}],
+		required: true,
+	}
 });
 
 module.exports = mongoose.model('User', userSchema);
