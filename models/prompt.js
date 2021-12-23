@@ -1,7 +1,3 @@
-/*
- * A mongoose model representing the `File` type defined in '../graphql/index.js'
- */
-
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -13,7 +9,8 @@ const promptEntrySchema = new Schema({
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: 'User'
+		ref: 'User',
+		required: true,
 	},
 	likes: {
 		type: Number,
@@ -21,4 +18,4 @@ const promptEntrySchema = new Schema({
 	}
 }, { timestamps: true });
 
-module.exports = mongoose.model('PromptEntry', promptEntrySchema);
+module.exports = mongoose.model('Prompt', promptEntrySchema);

@@ -30,7 +30,7 @@ module.exports = {
 				await prompt.save();
 				return merge.transformPrompt(prompt);
 			} catch (err) {
-				return err;
+				throw err;
 			}
 		},
 		likePrompt: async (parent, args , context) => {
@@ -41,7 +41,7 @@ module.exports = {
 				await prompt.save();
 				return merge.transformPrompt(prompt);
 			} catch (err) {
-				return err;
+				throw err;
 			}
 		},
 	},
