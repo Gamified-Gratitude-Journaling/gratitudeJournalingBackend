@@ -3,6 +3,7 @@ const DataLoader = require('dataloader');
 const File = require('../../../models/file');
 const JournalEntry = require('../../../models/journalEntry');
 const User = require('../../../models/user');
+const Prompt = require('../../../models/prompt');
 
 const dateToString = (date) => {
 	if (!date) return null;
@@ -21,6 +22,10 @@ const journalEntryLoader = new DataLoader((journalEntryId) => {
 	return JournalEntry.find({ _id: journalEntryId });
 });
 
+const promptEntryLoader = new DataLoader((promptEntryId) => {
+	return PromptEntry.find({ _id: promptEntryId });
+});
+
 const features = {
 	user : async userId => {
 		const user = await userLoader.load(userId.toString());
@@ -35,7 +40,6 @@ const features = {
 	},
 
 	transformJournalEntry: (journalEntry) => {
-		//console.log(journalEntry._doc);
 		return {
 			...journalEntry._doc,
 			createdAt: dateToString(journalEntry.createdAt),
@@ -56,19 +60,18 @@ const features = {
 		return features.transformJournalEntry(journalEntry);
 	},
 
-	/*transformFile: (referral) => {
+	transformPrompt: (prompt) => {
 		return {
-			...referral._doc,
-			createdAt: dateToString(referral.createdAt),
-			updatedAt: dateToString(referral.updatedAt),
-			consulationDate: dateToString(referral.consulationDate),
-			treatmentDate: dateToString(referral.treatmentDate),
-			journalEntry: features.journalEntry.bind(this, referral.journalEntry),
-			referrer: features.file.bind(this, referral.referrer),
-			referee: features.file.bind(this, referral.referee),
+			...prompt._doc,
+			createdAt: dateToString(prompt.createdAt),
+			user: features.user.bind(this, prompt._doc.user),
 		};
-	},*/
+	},
 
+	prompt: async promptId => {
+		const prompt = await promptLoader.load(promptId.toString());
+		return features.transformPrompt(prompt);
+	},
 };
 
 module.exports = {

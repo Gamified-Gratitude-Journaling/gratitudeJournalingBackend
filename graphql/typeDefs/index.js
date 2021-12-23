@@ -28,10 +28,19 @@ type JournalEntry {
 	user: User!
 }
 
+type Prompt {
+	_id: ID!
+	content: String!
+	createdAt: String!
+	likes: Int!
+	user: User!
+}
+
 type Query {
 	uploads: [File!]!
 	journalEntryUploads: [JournalEntry!]!
 	login(email: String!, password: String!): authData!
+	prompt: Prompt!
 }
 
 type Mutation {
@@ -39,5 +48,7 @@ type Mutation {
 	multipleUpload(files: [Upload!]!): [File!]!
 	journalEntryUpload(content: String!): JournalEntry!
 	createUser(email: String!, password: String!): User!
+	createPrompt(content: String!): Prompt!
+	likePrompt(prompt: ID!): Prompt!
 }
 `);
