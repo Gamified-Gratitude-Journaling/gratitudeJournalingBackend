@@ -41,7 +41,12 @@ const features = {
 					return (await pointLoader.loadMany(user._doc.points)).map(point => {
 						return features.transformPoint(point);
 					})
-				}
+				},
+				likedPrompts: async () => {
+					return (await promptLoader.loadMany(user._doc.likedPrompts)).map(likedPrompt => {
+						return features.transformPrompt(likedPrompt);
+					})
+				},
 			};
 		} catch (err) {
 			throw err;

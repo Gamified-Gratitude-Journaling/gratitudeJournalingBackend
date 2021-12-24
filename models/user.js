@@ -11,6 +11,14 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	}, 
+	likedPrompts: {
+		type: [{
+			type: Schema.Types.ObjectId,
+			ref: 'Prompt',
+			required: true,
+		}],
+		required: true,
+	},
 	points: {
 		type: [{
 			type: Schema.Types.ObjectId,
@@ -18,7 +26,7 @@ const userSchema = new Schema({
 			required: true,
 		}],
 		required: true,
-	}
+	},
 });
 
 module.exports = mongoose.model('User', userSchema);

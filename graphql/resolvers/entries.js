@@ -5,8 +5,7 @@ const WORDS_PER_POINT = 10;
 
 const countWords = (content) => {
 	let res = 0;
-	console.log(content);
-	content.blocks.map(({ text }) => {res += str.match(/(\w+)/g).length;})
+	JSON.parse(content).blocks.forEach(({ text }) => {res += text.match(/(\w+)/g).length;})
 	return res;
 }
 
@@ -27,7 +26,6 @@ module.exports = {
 					user: context.userId,
 					createdAt: { $gte: yesterday, $lte: now },
 				});
-				console.log(journalEntry);
 				if (!journalEntry) {
 					journalEntry = new JournalEntry({
 						content,
@@ -38,7 +36,6 @@ module.exports = {
 					const wcprev = countWords(journalEntry.content), wccurr = countWords(content);
 					const prevPoints = Math.min(5, Math.floor(wcprev/WORDS_PER_POINT));
 					const currPoints = Math.min(5, Math.floor(wccurr/WORDS_PER_POINT));
-					console.log("wtf");
 					if (prevPoints !== currPoints){
 						point.Mutation.createPoint(parent, {value: currPoints-prevPoints}, context);
 					}

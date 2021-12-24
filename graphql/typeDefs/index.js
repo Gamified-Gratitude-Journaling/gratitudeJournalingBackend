@@ -15,6 +15,7 @@ type User {
 	email: String!
 	password: String
 	points: [Point!]!
+	likedPrompts: [Prompt!]!
 }
 
 type authData {
@@ -58,7 +59,7 @@ type Mutation {
 	journalEntryUpload(content: String!): JournalEntry!
 	createUser(email: String!, password: String!): User!
 	createPrompt(content: String!): Prompt!
-	likePrompt(prompt: ID!): Prompt!
+	likePrompt(prompt: ID!): Prompt
 	createPoint(value: Int!): Point!
 }
 `);
