@@ -4,8 +4,9 @@ const point = require('./point');
 const WORDS_PER_POINT = 10;
 
 const countWords = (content) => {
+	if (!content) return 0;
 	let res = 0;
-	JSON.parse(content).blocks.forEach(({ text }) => {res += text.match(/(\w+)/g).length;})
+	JSON.parse(content).blocks.forEach(({ text }) => {if (text) res += text.match(/(\w+)/g).length;})
 	return res;
 }
 
