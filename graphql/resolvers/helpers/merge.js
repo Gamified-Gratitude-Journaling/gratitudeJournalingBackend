@@ -34,6 +34,9 @@ const pointLoader = new DataLoader((pointIds) => {
 const features = {
 	user: async userId => {
 		const user = await userLoader.load(userId.toString());
+		return await features.transformUser(user);
+	},
+	transformUser: async (user) => {
 		try {
 			return {
 				...user._doc, password: null,

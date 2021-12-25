@@ -12,6 +12,7 @@ type File {
 
 type User {
 	_id: ID!
+	username: String!
 	email: String!
 	password: String
 	points: [Point!]!
@@ -21,6 +22,7 @@ type User {
 type authData {
 	userId: ID!
 	token: String!
+	username: String!
 }
 
 type JournalEntry {
@@ -51,13 +53,14 @@ type Query {
 	login(email: String!, password: String!): authData!
 	prompt: Prompt!
 	points: [Point!]!
+	fetchUser(username: String!): User!
 }
 
 type Mutation {
 	singleUpload(file: Upload!): File!
 	multipleUpload(files: [Upload!]!): [File!]!
 	journalEntryUpload(content: String!): JournalEntry!
-	createUser(email: String!, password: String!): User!
+	createUser(email: String!, password: String!, username: String!): User!
 	createPrompt(content: String!): Prompt!
 	likePrompt(prompt: ID!): Prompt
 	createPoint(value: Int!): Point!

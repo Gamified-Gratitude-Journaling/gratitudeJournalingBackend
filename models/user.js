@@ -11,6 +11,10 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	}, 
+	username: {
+		type: String,
+		required: true
+	}, 
 	likedPrompts: {
 		type: [{
 			type: Schema.Types.ObjectId,
