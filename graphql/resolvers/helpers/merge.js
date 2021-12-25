@@ -28,12 +28,12 @@ const promptLoader = new DataLoader((promptIds) => {
 });
 
 const pointLoader = new DataLoader((pointIds) => {
-	return Point.find({ _id: { $in: pointIds.map(pointId => pointId.toString()) } });
+	return Point.find({ _id: { $in: pointIds } });
 });
 
 const features = {
 	user: async userId => {
-		const user = await userLoader.load(userId.toString());
+		const user = await userLoader.load(userId);
 		return await features.transformUser(user);
 	},
 	transformUser: async (user) => {
@@ -49,6 +49,12 @@ const features = {
 					return (await promptLoader.loadMany(user._doc.likedPrompts)).map(likedPrompt => {
 						return features.transformPrompt(likedPrompt);
 					})
+				},
+				followers: async () => {
+					return await Promise.all(user._doc.followers.map(user => features.user(user)));
+				},
+				following: async () => {
+					return await Promise.all(user._doc.following.map(user => features.user(user)));
 				},
 			};
 		} catch (err) {
@@ -66,14 +72,14 @@ const features = {
 
 	file: async fileId => {
 		if (!fileId) return null;
-		const file = await fileLoader.load(fileId.toString());
+		const file = await fileLoader.load(fileId);
 		return {
 			...file._doc, password: null,
 		};
 	},
 
 	journalEntry: async journalEntryId => {
-		const journalEntry = await journalEntryLoader.load(journalEntryId.toString());
+		const journalEntry = await journalEntryLoader.load(journalEntryId);
 		return features.transformJournalEntry(journalEntry);
 	},
 
@@ -86,7 +92,7 @@ const features = {
 	},
 
 	prompt: async promptId => {
-		const prompt = await promptLoader.load(promptId.toString());
+		const prompt = await promptLoader.load(promptId);
 		return features.transformPrompt(prompt);
 	},
 
@@ -99,7 +105,7 @@ const features = {
 	},
 
 	point: async pointId => {
-		const point = await pointLoader.load(pointId.toString());
+		const point = await pointLoader.load(pointId);
 		return features.transformPoint(point);
 	},
 };

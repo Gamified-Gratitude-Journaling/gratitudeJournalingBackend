@@ -17,6 +17,8 @@ type User {
 	password: String
 	points: [Point!]!
 	likedPrompts: [Prompt!]!
+	followers: [User!]!
+	following: [User!]!
 }
 
 type authData {
@@ -64,5 +66,7 @@ type Mutation {
 	createPrompt(content: String!): Prompt!
 	likePrompt(prompt: ID!): Prompt
 	createPoint(value: Int!): Point!
+	createFollow(followee: String!): User!
+	deleteFollow(followee: String!): User!
 }
 `);
