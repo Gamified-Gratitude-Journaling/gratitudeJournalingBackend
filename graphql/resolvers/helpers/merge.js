@@ -56,6 +56,10 @@ const features = {
 				following: async () => {
 					return await Promise.all(user._doc.following.map(user => features.user(user)));
 				},
+				entries: async () => {
+					const entries = await Promise.all(user._doc.entries.map(entry => features.journalEntry(entry)));
+					return entries.map(e => { return { ...e, content: "" } })
+				},
 			};
 		} catch (err) {
 			throw err;

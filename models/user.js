@@ -47,6 +47,14 @@ const userSchema = new Schema({
 		}],
 		required: true,
 	},
+	entries: {
+		type: [{
+			type: Schema.Types.ObjectId,
+			ref: 'JournalEntry',
+			required: true,
+		}],
+		required: true,
+	},
 });
 
 module.exports = mongoose.model('User', userSchema);

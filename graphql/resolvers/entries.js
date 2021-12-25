@@ -1,4 +1,5 @@
 const JournalEntry = require('../../models/journalEntry');
+const User = require('../../models/user');
 const merge = require('./helpers/merge');
 const point = require('./point');
 const WORDS_PER_POINT = 10;
@@ -33,6 +34,9 @@ module.exports = {
 						user: context.userId,
 					});
 					point.Mutation.createPoint(parent, {value: 10}, context);
+					const user = await User.findById(context.userId);
+					user.entries.push(journalEntry.toObject());
+					await user.save();
 				} else {
 					const wcprev = countWords(journalEntry.content), wccurr = countWords(content);
 					const prevPoints = Math.min(5, Math.floor(wcprev/WORDS_PER_POINT));
@@ -42,8 +46,8 @@ module.exports = {
 					}
 					journalEntry.content = content;
 				}
-				await journalEntry.save();
-				return merge.transformJournalEntry(journalEntry);
+				const savedJournalEntry = await journalEntry.save();
+				return merge.transformJournalEntry(savedJournalEntry);
 			} catch (err) {
 				throw err;
 			}

@@ -19,6 +19,7 @@ type User {
 	likedPrompts: [Prompt!]!
 	followers: [User!]!
 	following: [User!]!
+	entries: [JournalEntry!]!
 }
 
 type authData {
