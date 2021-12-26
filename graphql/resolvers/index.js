@@ -5,6 +5,7 @@ const user = require('./user');
 const upload = require('./upload');
 const prompt = require('./prompt');
 const point = require('./point');
+const leaderboard = require('./leaderboard');
 
 module.exports = {
 	Upload: graphQLUpload, //Resolves the `Upload` scalar
@@ -14,6 +15,7 @@ module.exports = {
 		...entries.Query,
 		...prompt.Query,
 		...point.Query,
+		...leaderboard.Query,
 	},
 	Mutation: {
 		...upload.Mutation,
@@ -21,5 +23,6 @@ module.exports = {
 		...entries.Mutation,
 		...prompt.Mutation,
 		...point.Mutation,
+		...leaderboard.Mutation,
 	},
 };

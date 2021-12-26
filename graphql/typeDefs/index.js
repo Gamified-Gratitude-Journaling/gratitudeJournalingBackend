@@ -50,6 +50,11 @@ type Point {
 	user: User!
 }
 
+type UserPointPair {
+	user: User!
+	points: Int!
+}
+
 type Query {
 	uploads: [File!]!
 	journalEntryUploads: [JournalEntry!]!
@@ -57,6 +62,7 @@ type Query {
 	prompt: Prompt!
 	points: [Point!]!
 	fetchUser(username: String!): User!
+	leaderboardStatus: [UserPointPair!]!
 }
 
 type Mutation {
@@ -69,5 +75,6 @@ type Mutation {
 	createPoint(value: Int!): Point!
 	createFollow(followee: String!): User!
 	deleteFollow(followee: String!): User!
+	resetLeaderboard(password: String!): String
 }
 `);
