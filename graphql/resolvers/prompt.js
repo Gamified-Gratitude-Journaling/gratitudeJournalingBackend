@@ -5,7 +5,7 @@ const point = require('./point');
 
 module.exports = {
 	Query: {
-		prompt: async (_,__,{userId}) => {
+		prompt: async (_, __, { userId }) => {
 			let totalLikes = 0;
 			const ranges = (await Prompt.find()).map((prompt) => {
 				totalLikes += prompt.likes + 1;
@@ -19,10 +19,10 @@ module.exports = {
 				step = Math.floor(step / 2);
 			}
 			const user = await User.findById(userId);
-			let liked = false;
-			if (user && user.likedPrompts.find(e => e._id.toString().localeCompare(ranges[res][1]))) liked=true;
 			const prompt = await merge.transformPrompt(ranges[res][1]);
-			return {prompt, liked}
+			let liked = false;
+			if (user && user.likedPrompts.find(e => e.toString().localeCompare(prompt._id) === 0)) liked = true;
+			return { prompt, liked }
 		},
 	},
 	Mutation: {
@@ -43,12 +43,21 @@ module.exports = {
 			const promptId = args.prompt;
 			try {
 				const [user, prompt] = await Promise.all([User.findById(context.userId), Prompt.findById(promptId)]);
-				if (prompt.user.toString().localeCompare(context.userId) === 0 || user.likedPrompts.find(e => e.toString().localeCompare(promptId) === 0)) {
-					return null;
+				if (prompt.user.toString().localeCompare(context.userId) === 0) {
+					throw new Error("Cannot like own prompt"); // User trying to like thier own prompt
 				}
-				prompt.likes += 1;
-				user.likedPrompts.push(prompt);
-				await Promise.all([prompt.save(), point.Mutation.createPoint(parent, {value: 5}, {userId: prompt._doc.user._id}), user.save()]);
+				const liked = user.likedPrompts.find(e => e.toString().localeCompare(promptId) === 0);
+				if (liked){
+					user.likedPrompts = user.likedPrompts.filter(e => e.toString().localeCompare(promptId) !== 0);
+				} else{
+					user.likedPrompts.push(prompt);
+				}
+				prompt.likes += liked ? -1 : 1;
+				await Promise.all([
+					prompt.save(),
+					point.Mutation.createPoint(parent, { value: liked ? -5 : 5 }, { userId: prompt._doc.user._id }),
+					user.save()
+				]);
 				return merge.transformPrompt(prompt);
 			} catch (err) {
 				throw err;

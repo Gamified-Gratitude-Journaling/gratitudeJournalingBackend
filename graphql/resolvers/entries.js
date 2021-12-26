@@ -16,6 +16,22 @@ module.exports = {
 		journalEntryUploads: async (parent, args, context) => {
 			return (await JournalEntry.find({ user: context.userId })).map(entry => merge.transformJournalEntry(entry))
 		},
+		currentEntry: async (_, __, {userId}) => {
+			let now = new Date();
+			let yesterday = new Date();
+			yesterday.setDate(yesterday.getDate() - 1);
+			yesterday.setHours(0, 0, 0, 0);
+			try {
+				const entry = await JournalEntry.findOne({
+					user: userId,
+					createdAt: { $gte: yesterday, $lte: now },
+				});
+				if (entry) return merge.transformJournalEntry(entry);
+				return null;
+			} catch (err) {
+				throw (err);
+			}
+		}
 	},
 	Mutation: {
 		journalEntryUpload: async (parent, { content }, context) => {

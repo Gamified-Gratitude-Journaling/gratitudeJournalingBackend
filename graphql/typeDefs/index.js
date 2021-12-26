@@ -68,6 +68,7 @@ type Query {
 	points: [Point!]!
 	fetchUser(username: String!): User!
 	leaderboardStatus: [UserPointPair!]!
+	currentEntry: JournalEntry
 }
 
 type Mutation {
