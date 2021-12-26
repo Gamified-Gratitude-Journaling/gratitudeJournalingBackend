@@ -55,11 +55,16 @@ type UserPointPair {
 	points: Int!
 }
 
+type PromptLikedPair {
+	prompt: Prompt!
+	liked: Boolean!
+}
+
 type Query {
 	uploads: [File!]!
 	journalEntryUploads: [JournalEntry!]!
 	login(email: String!, password: String!): authData!
-	prompt: Prompt!
+	prompt: PromptLikedPair!
 	points: [Point!]!
 	fetchUser(username: String!): User!
 	leaderboardStatus: [UserPointPair!]!

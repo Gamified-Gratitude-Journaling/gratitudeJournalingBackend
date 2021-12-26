@@ -5,7 +5,7 @@ const point = require('./point');
 
 module.exports = {
 	Query: {
-		prompt: async () => {
+		prompt: async (_,__,{userId}) => {
 			let totalLikes = 0;
 			const ranges = (await Prompt.find()).map((prompt) => {
 				totalLikes += prompt.likes + 1;
@@ -18,7 +18,11 @@ module.exports = {
 				if (next < ranges.length && ranges[next][0] <= ind) res = next;
 				step = Math.floor(step / 2);
 			}
-			return merge.transformPrompt(ranges[res][1]);
+			const user = await User.findById(userId);
+			let liked = false;
+			if (user && user.likedPrompts.find(e => e._id.toString().localeCompare(ranges[res][1]))) liked=true;
+			const prompt = await merge.transformPrompt(ranges[res][1]);
+			return {prompt, liked}
 		},
 	},
 	Mutation: {
