@@ -34,6 +34,7 @@ type JournalEntry {
 	content: String!
 	createdAt: String!
 	user: User!
+	words: Int!
 }
 
 type Prompt {

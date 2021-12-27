@@ -18,13 +18,12 @@ module.exports = {
 		},
 		currentEntry: async (_, __, {userId}) => {
 			let now = new Date();
-			let yesterday = new Date();
-			yesterday.setDate(yesterday.getDate() - 1);
-			yesterday.setHours(0, 0, 0, 0);
+			let today = new Date();
+			today.setHours(0,0,0,0);
 			try {
 				const entry = await JournalEntry.findOne({
 					user: userId,
-					createdAt: { $gte: yesterday, $lte: now },
+					createdAt: { $gte: today, $lte: now },
 				});
 				if (entry) return merge.transformJournalEntry(entry);
 				return null;
@@ -36,18 +35,18 @@ module.exports = {
 	Mutation: {
 		journalEntryUpload: async (parent, { content }, context) => {
 			let now = new Date();
-			let yesterday = new Date();
-			yesterday.setDate(yesterday.getDate() - 1);
-			yesterday.setHours(0, 0, 0, 0);
+			let today = new Date();
+			today.setHours(0,0,0,0);
 			try {
 				let journalEntry = await JournalEntry.findOne({
 					user: context.userId,
-					createdAt: { $gte: yesterday, $lte: now },
+					createdAt: { $gte: today, $lte: now },
 				});
 				if (!journalEntry) {
 					journalEntry = new JournalEntry({
 						content,
 						user: context.userId,
+						words: 0,
 					});
 					point.Mutation.createPoint(parent, {value: 10}, context);
 					const user = await User.findById(context.userId);
@@ -61,6 +60,7 @@ module.exports = {
 						point.Mutation.createPoint(parent, {value: currPoints-prevPoints}, context);
 					}
 					journalEntry.content = content;
+					journalEntry.words = wccurr;
 				}
 				const savedJournalEntry = await journalEntry.save();
 				return merge.transformJournalEntry(savedJournalEntry);

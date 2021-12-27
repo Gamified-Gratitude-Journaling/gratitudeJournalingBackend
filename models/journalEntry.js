@@ -12,6 +12,10 @@ const journalEntrySchema = new Schema({
 		ref: 'User',
 		required: true,
 	},
+	words: {
+		type: Number,
+		required: true,
+	}
 }, { timestamps: true });
 
 module.exports = mongoose.model('JournalEntry', journalEntrySchema);
