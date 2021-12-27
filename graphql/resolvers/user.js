@@ -51,6 +51,7 @@ module.exports = {
 					followers: [],
 					following: [],
 					entries: [],
+					createdPrompts: [],
 				});
 				const result = await user.save();
 				return await merge.transformUser(result);

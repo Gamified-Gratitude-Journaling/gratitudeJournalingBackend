@@ -43,6 +43,9 @@ const features = {
 				points: async () => {
 					return await Promise.all(user._doc.points.map(e => features.point(e)));
 				},
+				createdPrompts: async () => {
+					return await Promise.all(user._doc.createdPrompts.map(e => features.prompt(e)));
+				},
 				likedPrompts: async () => {
 					return await Promise.all(user._doc.likedPrompts.map(e => features.prompt(e)));
 				},

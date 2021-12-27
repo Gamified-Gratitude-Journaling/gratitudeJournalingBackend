@@ -15,6 +15,14 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	}, 
+	createdPrompts: {
+		type: [{
+			type: Schema.Types.ObjectId,
+			ref: 'Prompt',
+			required: true,
+		}],
+		required: true,
+	},
 	likedPrompts: {
 		type: [{
 			type: Schema.Types.ObjectId,

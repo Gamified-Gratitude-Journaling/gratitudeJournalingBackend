@@ -34,6 +34,9 @@ module.exports = {
 			});
 			try {
 				await prompt.save();
+				const user = await User.findById(context.userId);
+				user.createdPrompts.push(prompt.toObject());
+				await user.save();
 				return merge.transformPrompt(prompt);
 			} catch (err) {
 				throw err;

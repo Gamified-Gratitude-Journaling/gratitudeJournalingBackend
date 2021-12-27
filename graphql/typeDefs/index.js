@@ -17,6 +17,7 @@ type User {
 	password: String
 	points: [Point!]!
 	likedPrompts: [Prompt!]!
+	createdPrompts: [Prompt!]!
 	followers: [User!]!
 	following: [User!]!
 	entries: [JournalEntry!]!
