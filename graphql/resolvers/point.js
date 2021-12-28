@@ -22,6 +22,7 @@ module.exports = {
 			});
 			try {
 				const user = await User.findById(userId);
+				if (!user) throw new Error("Not signed in");
 				let pointPool = await PointPool.findOne();
 				if (!pointPool) {
 					pointPool = new PointPool({
