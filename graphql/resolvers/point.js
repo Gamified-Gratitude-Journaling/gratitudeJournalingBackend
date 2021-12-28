@@ -2,6 +2,7 @@ const Point = require('../../models/point');
 const User = require('../../models/user');
 const PointPool = require('../../models/pointPool');
 const merge = require('./helpers/merge');
+const { mongooseToday } = require('./helpers/utils');
 
 module.exports = {
 	Query: {
@@ -11,18 +12,23 @@ module.exports = {
 				return merge.transformPoint(point);
 			});
 			if (!points) return [];*/
-			return await (await merge.user(userId)).points();
+			return res = await (await merge.user(userId)).points();
 		},
 	},
 	Mutation: {
-		createPoint: async (parent, { value }, {userId}) => {
-			const point = new Point({
-				value,
-				user: userId,
-			});
+		createPoint: async (parent, { value }, { userId }) => {
 			try {
 				const user = await User.findById(userId);
 				if (!user) throw new Error("Not signed in");
+				let point = await Point.findOne({user: userId, createdAt: mongooseToday() });
+				if (point) {
+					point.value += value;
+					return merge.transformPoint(await point.save());
+				}
+				point = new Point({
+					value,
+					user: userId,
+				});
 				let pointPool = await PointPool.findOne();
 				if (!pointPool) {
 					pointPool = new PointPool({

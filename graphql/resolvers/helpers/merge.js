@@ -5,11 +5,7 @@ const JournalEntry = require('../../../models/journalEntry');
 const User = require('../../../models/user');
 const Prompt = require('../../../models/prompt');
 const Point = require('../../../models/point');
-
-const dateToString = (date) => {
-	if (!date) return null;
-	return new Date(date).toISOString();
-}
+const { dateToString } = require('./utils');
 
 const userLoader = new DataLoader((userIds) => {
 	return User.find({ _id: { $in: userIds } });
