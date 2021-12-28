@@ -71,6 +71,7 @@ type Query {
 	fetchUser(username: String!): User!
 	leaderboardStatus: [UserPointPair!]!
 	currentEntry: JournalEntry
+	isFollowing(followee: String!): Boolean!
 }
 
 type Mutation {
@@ -81,8 +82,7 @@ type Mutation {
 	createPrompt(content: String!): Prompt!
 	likePrompt(prompt: ID!): Prompt
 	createPoint(value: Int!): Point!
-	createFollow(followee: String!): User!
-	deleteFollow(followee: String!): User!
+	toggleFollow(followee: String!): User!
 	resetLeaderboard(password: String!): String
 }
 `);
