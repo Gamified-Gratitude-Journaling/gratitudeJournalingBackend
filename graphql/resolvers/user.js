@@ -1,12 +1,13 @@
 const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const merge = require('./helpers/merge');
+const importFresh = require('import-fresh');
 
 
 module.exports = {
 	Mutation: {
 		createUser: async (_, args) => {
+			const merge = importFresh('./helpers/merge')
 			try {
 				if (await User.findOne({ email: args.email })) {
 					throw new Error('Email already used.');
@@ -33,6 +34,7 @@ module.exports = {
 			}
 		},
 		toggleFollow: async (_, { followee: username }, { userId }) => {
+			const merge = importFresh('./helpers/merge')
 			try {
 				if (!userId) { throw new Error("Not signed in"); }
 				const following = await User.findOne({ username });
@@ -59,6 +61,7 @@ module.exports = {
 	},
 	Query: {
 		login: async (_, { email, password }) => {
+			const merge = importFresh('./helpers/merge')
 			const user = await User.findOne({ email: email });
 			if (!user) {
 				throw new Error(`User not found`);
@@ -74,8 +77,9 @@ module.exports = {
 				{ expiresIn: '1h' }
 			);
 			return { userId: user.id, token: token, tokenExpiration: 1, username: user.username };
-		},
+		}, 
 		fetchUser: async (_, { username }) => {
+			const merge = importFresh('./helpers/merge')
 			const user = await User.findOne({ username: username });
 			if (!user) throw new Error("User not found");
 			return await merge.transformUser(user);

@@ -1,10 +1,11 @@
 const PointPool = require('../../models/pointPool');
 const Point = require('../../models/point');
-const merge = require('./helpers/merge');
+const importFresh = require('import-fresh');
 
 module.exports = {
 	Query: {
 		leaderboardStatus: async () => {
+			const merge=importFresh('./helpers/merge')
 			try {
 				let res = {};
 				const pointPool = await PointPool.findOne();

@@ -1,11 +1,12 @@
 const Prompt = require('../../models/prompt');
 const User = require('../../models/user');
-const merge = require('./helpers/merge');
+const importFresh = require('import-fresh')
 const point = require('./point');
 
 module.exports = {
 	Query: {
 		prompt: async (_, __, { userId }) => {
+			const merge = importFresh('./helpers/merge')
 			let totalLikes = 0;
 			const ranges = (await Prompt.find()).map((prompt) => {
 				totalLikes += prompt.likes + 1;
@@ -27,6 +28,7 @@ module.exports = {
 	},
 	Mutation: {
 		createPrompt: async (parent, { content }, context) => {
+			const merge = importFresh('./helpers/merge')
 			const prompt = new Prompt({
 				content,
 				user: context.userId,
@@ -43,6 +45,7 @@ module.exports = {
 			}
 		},
 		likePrompt: async (parent, args, context) => {
+			const merge = importFresh('./helpers/merge')
 			const promptId = args.prompt;
 			try {
 				const [user, prompt] = await Promise.all([User.findById(context.userId), Prompt.findById(promptId)]);

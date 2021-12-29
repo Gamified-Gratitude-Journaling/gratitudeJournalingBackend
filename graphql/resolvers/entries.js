@@ -1,6 +1,6 @@
 const JournalEntry = require('../../models/journalEntry');
 const User = require('../../models/user');
-const merge = require('./helpers/merge');
+const importFresh = require('import-fresh');
 const { mongooseToday } = require('./helpers/utils');
 const point = require('./point');
 const WORDS_PER_POINT = 10;
@@ -15,9 +15,11 @@ const countWords = (content) => {
 module.exports = {
 	Query: {
 		journalEntryUploads: async (parent, args, context) => {
+			const merge = importFresh('./helpers/merge')
 			return (await JournalEntry.find({ user: context.userId })).map(entry => merge.transformJournalEntry(entry))
 		},
 		currentEntry: async (_, __, {userId}) => {
+			const merge = importFresh('./helpers/merge')
 			try {
 				const entry = await JournalEntry.findOne({
 					user: userId,
@@ -32,6 +34,7 @@ module.exports = {
 	},
 	Mutation: {
 		journalEntryUpload: async (parent, { content }, context) => {
+			const merge = importFresh('./helpers/merge')
 			try {
 				let journalEntry = await JournalEntry.findOne({
 					user: context.userId,

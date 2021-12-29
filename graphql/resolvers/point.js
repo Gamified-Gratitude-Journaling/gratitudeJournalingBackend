@@ -1,22 +1,19 @@
 const Point = require('../../models/point');
 const User = require('../../models/user');
 const PointPool = require('../../models/pointPool');
-const merge = require('./helpers/merge');
+const importFresh = require('import-fresh');
 const { mongooseToday } = require('./helpers/utils');
 
 module.exports = {
 	Query: {
 		points: async (parent, args, { userId }) => {
-			/*const points = (await Point.find({user: userId})).map(point => {
-				console.log(point);
-				return merge.transformPoint(point);
-			});
-			if (!points) return [];*/
+			const merge = importFresh('./helpers/merge')
 			return res = await (await merge.user(userId)).points();
 		},
 	},
 	Mutation: {
 		createPoint: async (parent, { value }, { userId }) => {
+			const merge = importFresh('./helpers/merge')
 			try {
 				const user = await User.findById(userId);
 				if (!user) throw new Error("Not signed in");

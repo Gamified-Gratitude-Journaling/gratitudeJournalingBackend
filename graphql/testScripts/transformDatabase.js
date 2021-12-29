@@ -5,7 +5,7 @@ require('dotenv').config(); //configure environment variables as specified in `.
 
 const test = async () => {
 	console.log("testing");
-	await mongoose.connect(`${process.env.MONGO_URL}`);
+	await mongoose.connect(`mongodb+srv://admin:test@cluster0.xvemn.mongodb.net/Test?retryWrites=true&w=majority`);
 	const entries = await JournalEntry.find();
 	await Promise.all(entries.map(e => {
 		e.words = 5;
