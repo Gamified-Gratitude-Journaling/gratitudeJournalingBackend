@@ -73,8 +73,9 @@ module.exports = {
 					user: userId,
 					createdAt: mongooseToday(),
 				});
-				if (entry) return true;
-				return false;
+				if (!entry) return false;
+				entry.wasSubmitted=true;
+				await entry.save();
 			} catch(err){throw(err)}
 		},
 	},
