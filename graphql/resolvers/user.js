@@ -10,10 +10,10 @@ module.exports = {
 			const merge = importFresh('./helpers/merge')
 			try {
 				if (await User.findOne({ email: args.email })) {
-					throw new Error('Email already used.');
+					throw new Error('Email already in use.');
 				}
 				if (await User.findOne({ username: args.username })) {
-					throw new Error('Username already used.');
+					throw new Error('Username already in use');
 				}
 				const hashedPassword = await bcrypt.hash(args.password, 12);
 				const user = new User({
@@ -64,11 +64,11 @@ module.exports = {
 			const merge = importFresh('./helpers/merge')
 			const user = await User.findOne({ email: email });
 			if (!user) {
-				throw new Error(`User not found`);
+				throw new Error(`Email not found`);
 			}
 			const isEqual = await bcrypt.compare(password, user.password);
 			if (!isEqual) {
-				throw new Error(`Password is incorrect.`);
+				throw new Error(`Password incorrect`);
 			}
 			const token = jwt.sign({
 				userId: user.id, email: user.email
