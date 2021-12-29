@@ -35,6 +35,7 @@ type JournalEntry {
 	createdAt: String!
 	user: User!
 	words: Int!
+	wasSubmitted: Boolean!
 }
 
 type Prompt {
@@ -83,6 +84,7 @@ type Mutation {
 	likePrompt(prompt: ID!): Prompt
 	createPoint(value: Int!): Point!
 	toggleFollow(followee: String!): User!
+	submitEntry: Boolean
 	resetLeaderboard(password: String!): String
 }
 `);

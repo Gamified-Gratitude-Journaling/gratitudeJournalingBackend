@@ -45,6 +45,7 @@ module.exports = {
 						content,
 						user: context.userId,
 						words: 0,
+						wasSubmitted: false,
 					});
 					const user = await User.findById(context.userId);
 					user.entries.push(journalEntry.toObject());
@@ -65,6 +66,16 @@ module.exports = {
 			} catch (err) {
 				throw err;
 			}
+		},
+		submitEntry: async (_, __, {userId}) => {
+			try {
+				const entry = await JournalEntry.findOne({
+					user: userId,
+					createdAt: mongooseToday(),
+				});
+				if (entry) return true;
+				return false;
+			} catch(err){throw(err)}
 		},
 	},
 }

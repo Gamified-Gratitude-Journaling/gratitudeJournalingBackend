@@ -15,7 +15,11 @@ const journalEntrySchema = new Schema({
 	words: {
 		type: Number,
 		required: true,
-	}
+	},
+	wasSubmitted: {
+		type: Boolean,
+		required: true,
+	},
 }, { timestamps: true });
 
 module.exports = mongoose.model('JournalEntry', journalEntrySchema);
