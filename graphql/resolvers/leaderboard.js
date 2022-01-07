@@ -1,6 +1,7 @@
 const PointPool = require('../../models/pointPool');
 const Point = require('../../models/point');
 const importFresh = require('import-fresh');
+const User = require('../../models/user');
 
 module.exports = {
 	Query: {
@@ -22,7 +23,8 @@ module.exports = {
 					return 0;
 				});
 				return await Promise.all(users.map(async ([userId, points]) => {
-					return {user: await merge.user(userId), points}; 
+					const user = await User.findById(userId);
+					return {user: await merge.transformUser(user), points}; 
 				}));
 			} catch (err) {
 				throw (err);
