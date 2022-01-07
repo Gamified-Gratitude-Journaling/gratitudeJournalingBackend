@@ -20,7 +20,7 @@ module.exports = {
 				const users = Object.entries(res).sort((a, b) => {
 					if (a[1] > b[1]) return -1;
 					if (a[1] < b[1]) return 1;
-					return 0;
+					return a[0].localeCompare(a[1]);
 				});
 				return await Promise.all(users.map(async ([userId, points]) => {
 					const user = await User.findById(userId);
