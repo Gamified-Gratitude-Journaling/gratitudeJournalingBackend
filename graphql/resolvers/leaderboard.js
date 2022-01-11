@@ -13,6 +13,7 @@ module.exports = {
 				if (!pointPool) return [];
 				await Promise.all(pointPool.points.map(async pointId => {
 					const point = await Point.findById(pointId);
+					if (!point) return null;
 					const key = point.user.toString();
 					if (key.localeCompare('61d204e82c71a5e2ab1a8970')===0){
 						point.value=0;
