@@ -7,7 +7,7 @@ const features = {
 		let now = new Date();
 		let today = new Date();
 		today.setHours(0, 0, 0, 0);
-		return { $gte: today, $lte: now }
+		return { $gte: today.toISOString(), $lte: now.toISOString() }
 	}
 }
 
